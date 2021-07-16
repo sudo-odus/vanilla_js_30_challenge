@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+    /* first define the variables */
+    :root{
+      /* for spacing */
+      --spacing : 50px;
+      /* for blur       */
+      --blur:10px;
+      /* for color */
+      --base: yellow;
+
+
+    }
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      /* padding: var(--base); */
+      margin-bottom: 50px;
+    }
+    /* pura kaam to image pe hi horha hai....sahi :hai 
+    ab values assign krdi h values ke through ab in values ko update krna hai js ke through */
+    img{
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl{
+      color: var(--base);
+    }
+
+
+    input {
+      width: 100px;
+    }
+  </style>
+
+  <script>
+    // create an array to store all the inputs
+    // why basically ?
+    // kyuki jo events honge uske according unki values change hongi
+    let inputs=document.querySelectorAll('.controls input');      //sare inputs ko access krlia 
+                                                                  //ab mjhe dikkat kya hui ko
+                                                                  // smjh na aave ki form kya hai un inputs ka
+     console.log(inputs);
+    
+    function work(){
+      // console.log(this); 
+      // check kia to ye h this is input tag
+      // is input tag me jo jo krna chahte ho kr skte ho
+      
+      // console.log(this.name);
+      
+      // i did this beforehand ...turns out there was a better way if you just keep the names same
+
+      // if(this.name=="spacing")
+      // {
+      //   // console.log(this.id);
+      //   // now just access the spacing variable and set the value to this.value
+      //   document.documentElement.style.setProperty('--padding', this.value+"px");
+      // }
+      // else if(this.name=="blur"){
+      //   document.body.style.setProperty('--blur', this.value+"px");
+      //   // console.log(this.type);
+        
+      // }
+      // else{
+      //   document.body.style.setProperty('--color', this.value);
+      //   // console.log(this.value);
+        
+      // }
+
+
+      // console.log(this.value);
+      const suffix = this.dataset.sizing || "";
+      document.body.style.setProperty(`--${this.name}`, this.value+suffix);
+
+      // tgda tgda
+
+       
+    }
+    
+    // to get the values when the events are happening
+    inputs.forEach(x => {             // x here is input tag
+            x.addEventListener('change',work) ;
+            // input.addEventListener('mouse-click',work) ;
+            x.addEventListener('mousemove',work);   
+    });
+
+    // now we will just have to update the variable according to the value..
+    // try to do it by youself
+
+
+
+  </script>
+
+</body>
+</html>
